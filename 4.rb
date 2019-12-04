@@ -14,13 +14,8 @@ def is_password?(p)
 end
 
 def has_repeating_digits?(pa)
-  res = false
-  for i in 1..5 do
-    if pa[i] == pa[i-1]
-      res = true
-    end
-  end
-  res
+  groups = pa.group_by {|i| i}
+  groups.values.map {|v| v.length}.include?(2)
 end
 
 def does_not_decrease?(pa)
@@ -38,4 +33,4 @@ puts is_password?(111122) # true
 
 min = 138241
 max = 674034
-#puts password_count(min, max)
+puts password_count(min, max)
