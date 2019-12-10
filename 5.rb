@@ -2,13 +2,13 @@ class IntcodeComputer
   PositionMode = "position"
   ImmediateMode = "immediate"
 
-  def compute(input, starting_input)
-    @hashed_input = hash_input(input)
+  def compute(code, inputs)
+    @hash = hash_input(code)
     @pointer = 0
     increment_pointer = true
 
     while true do
-      cmd = @hashed_input[@pointer]
+      cmd = @hash[@pointer]
       ops_code = get_ops_code(cmd)
       modes = get_modes(cmd)
 
@@ -25,7 +25,7 @@ class IntcodeComputer
         set_value(res, args[2])
       when "03"
         args = get_args(1)
-        @hashed_input[args[0]] = starting_input
+        @hash[args[0]] = inputs.shift
       when "04"
         args = get_args(1)
         puts get_value(args[0], modes[0])
@@ -69,21 +69,21 @@ class IntcodeComputer
   def get_args(num_args)
     args = []
     for i in 1..num_args do
-      args << @hashed_input[@pointer+i]
+      args << @hash[@pointer+i]
     end
     args
   end
 
   def get_value(param, mode)
     if mode == PositionMode
-      @hashed_input[param]
+      @hash[param]
     elsif mode == ImmediateMode
       param
     end
   end
 
   def set_value(val, param)
-    @hashed_input[param] = val
+    @hash[param] = val
   end
 
   def hash_input(input)
@@ -126,4 +126,4 @@ day_five = "3,225,1,225,6,6,1100,1,238,225,104,0,1102,67,92,225,1101,14,84,225,1
 
 comp = IntcodeComputer.new
 #comp.compute(test, 800)
-comp.compute(day_five, 5)
+comp.compute(day_five, [5])
